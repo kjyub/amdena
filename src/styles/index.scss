@@ -1,0 +1,9 @@
+/* src/styles/index.scss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 커스텀 스타일을 여기에 추가할 수 있습니다. */
+#root {
+    @apply relative min-w-[100vw] max-w-[100vw] w-screen h-screen max-h-[100vh] p-0 m-0 bg-gray-100;
+}
