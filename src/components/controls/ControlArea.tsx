@@ -48,7 +48,7 @@ export default function ControlArea({
         <CS.ControlBox>
             <CS.ControlExplain>
                 <p>영역을 설정할 방식을 골라주세요</p>
-                <p className="sub">고르지 않을 시 전 세계에서 선택합니다</p>
+                {/* <p className="sub">고르지 않을 시 전 세계에서 선택합니다</p> */}
             </CS.ControlExplain>
 
             <CS.AreaMethodBox>

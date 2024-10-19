@@ -15,6 +15,8 @@ interface IControlMain {
     setAreaMethodType: React.Dispatch<React.SetStateAction<AreaMethodTypes>>
     randomGameType: GameTypes
     setRandomGameType: React.Dispatch<React.SetStateAction<GameTypes>>
+    isGameStart: boolean
+    setGameStart: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function ControlMain({ 
     map, 
@@ -24,6 +26,8 @@ export default function ControlMain({
     setAreaMethodType,
     randomGameType,
     setRandomGameType,
+    isGameStart,
+    setGameStart,
 }: IControlMain) {
 
     return (
@@ -39,7 +43,9 @@ export default function ControlMain({
 
                 <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
 
-                <CS.GameStartButton>
+                <CS.GameStartButton
+                    onClick={() => {setGameStart(true)}}
+                >
                     <span>게임 시작</span>
                 </CS.GameStartButton>
             </CS.Panel>

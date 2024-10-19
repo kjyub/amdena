@@ -174,4 +174,9 @@ export default class CommonUtils {
         element.style.height = "auto"
         element.style.height = (Number(element.scrollHeight) + 4) + "px"
     }
+    static async delay(ms: number): Promise<void> {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms)
+        })
+    }
 }

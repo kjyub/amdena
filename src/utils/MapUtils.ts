@@ -1,9 +1,10 @@
 import { TextFormats } from "@/types/CommonTypes"
 import { Coordinate, Coordinates } from "@/types/game/Coordinates"
+import axios from "axios"
 
 export default class MapUtils {
-    static async getMapAddress(lat: number, lng: number): string {
-        let address = ""
+    static async getGeocode(lat: number, lng: number): google.maps.GeocoderResult | null {
+        let geocode: google.maps.GeocoderResult | null = null
 
         try {
             const response: google.maps.GeocoderResponse = await axios.get(
@@ -14,17 +15,23 @@ export default class MapUtils {
             let result: google.maps.GeocoderResult = null
 
             if (results.length > 2) {
-                result = results[results.length - 2]
+                geocode = results[results.length - 2]
             } else if (results.length === 1) {
-                result = results[0]
+                geocode = results[0]
             } else {
-                return ""
+                return geocode
             }
-
-            address = result.formatted_address
         } catch (error) {
             console.error('Error during reverse geocoding:', error)
         }
+
+        return geocode
+    }
+    static async getMapAddress(lat: number, lng: number): string {
+        let address = ""
+
+        const geocode = await this.getGeocode(lat, lng)
+        address = geocode.formatted_address
 
         return address
     }
@@ -114,5 +121,53 @@ export default class MapUtils {
         ctx.strokeStyle = "blue"
         ctx.lineWidth = 3
         ctx.stroke()
+    }
+    static isContainPolygon(area: Coordinates, coord: Coordinate): boolean {
+        const N = area.length - 1 // 다각형의 꼭짓점 개수 (마지막 점은 첫 번째 점과 같다고 가정)
+        let counter = 0
+        let p1: Coordinate = area[0]
+
+        for (let i = 1; i <= N; i++) {
+            const p2: Coordinate = area[i % N]
+
+            // 점의 y좌표가 p1과 p2 사이에 있는지 확인
+            if (
+                coord.lat > Math.min(p1.lat, p2.lat) &&
+                coord.lat <= Math.max(p1.lat, p2.lat) &&
+                coord.lng <= Math.max(p1.lng, p2.lng) &&
+                p1.lat !== p2.lat
+            ) {
+                // 다각형의 변과 수평선을 그었을 때의 교차점 x좌표 계산
+                const xinters = ((coord.lat - p1.lat) * (p2.lng - p1.lng)) / (p2.lat - p1.lat) + p1.lng
+
+                // 교차점이 점의 x좌표보다 오른쪽에 있거나, 변이 수직인 경우 카운터 증가
+                if (p1.lng === p2.lng || coord.lng <= xinters) {
+                    counter += 1
+                }
+            }
+
+            p1 = p2
+        }
+
+        // 교차 횟수가 홀수이면 내부, 짝수이면 외부
+        return counter % 2 !== 0
+    }
+    static getRandomCoordinate(area: Coordinates): Coordinate {
+        const [minX, minY, maxX, maxY] = this.getPolygonBoundingBox(area)
+        
+        const getRandomCoordByRect = (): Coordinate => {
+            return { lat: Math.random() * (maxY - minY) + minY, lng: Math.random() * (maxX - minX) + minX }
+        }
+
+        let randomCoord: Coordinate = { lng: 0, lat: 0 }
+
+        while(true) {
+            randomCoord = getRandomCoordByRect()
+            if (this.isContainPolygon(area, randomCoord)) {
+                break
+            }
+        }
+
+        return randomCoord
     }
 }

@@ -55,6 +55,10 @@ const Game = ({ type, currentType, setRandomType, title, icon }: IGame) => {
             onMouseEnter={() => {setIsFocus(true)}}
             onMouseLeave={() => {setIsFocus(false)}}
             onClick={() => {
+                if (currentType === type) {
+                    setRandomType(GameTypes.NONE)
+                    return
+                }
                 setRandomType(type)
             }}
         >

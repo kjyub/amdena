@@ -11,9 +11,12 @@ function App() {
 
     const [areaMethodType, setAreaMethodType] = useState<AreaMethsodTypes>(AreaMethodTypes.ALL)
     const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.NONE)
+    const [isGameStart, setGameStart] = useState<boolean>(false)
 
     useEffect(() => {
         setSelectedArea([])
+        setRandomGameType(GameTypes.NONE)
+        setGameStart(false)
     }, [areaMethodType])
 
 
@@ -25,6 +28,9 @@ function App() {
                 selectedArea={selectedArea}
                 areaMethodType={areaMethodType}
                 setSelectedArea={setSelectedArea}
+                isGameStart={isGameStart}
+                setGameStart={setGameStart}
+                randomGameType={randomGameType}
             />
             <ControlMain 
                 map={map} 
@@ -34,6 +40,8 @@ function App() {
                 setAreaMethodType={setAreaMethodType}
                 randomGameType={randomGameType}
                 setRandomGameType={setRandomGameType}
+                isGameStart={isGameStart}
+                setGameStart={setGameStart}
             />
         </>
     )

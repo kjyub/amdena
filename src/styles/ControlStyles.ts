@@ -85,3 +85,16 @@ export const PlaceSearchResult = tw.div`
     [&>button]:text-sand-700 [&>button]:text-sm [&>button]:text-left
     [&>button]:duration-200
 `
+
+export const ResultBox = tw.div`
+    absolute z-50 bottom-12 -left-32
+    flex flex-row justify-between items-start w-72 p-2 space-x-1
+    rounded-lg bg-sand-100/70 backdrop-blur
+
+    [&>.value]:text-sm [&>.value]:text-sand-700 [&>.value]:font-medium
+    [&>.value]:text-left
+    [&>.control]:flex [&>.control]:flex-shrink-0 [&>.control]:justify-end [&>.control]:items-center [&>.control]:space-x-2
+    [&>.control>.more]:ml-auto [&>.control>.more]:px-2 [&>.control>.more]:py-1
+    [&>.control>.more]:text-sm [&>.control>.more]:text-sand-600
+    [&>.control>.more]:rounded-lg hover:[&>.control>.more]:bg-sand-300/50 [&>.control>.more]:duration-200
+`

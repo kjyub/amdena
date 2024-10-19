@@ -32,3 +32,99 @@
         background-position: 100% 0%, 0% 100%, 0% 0%, 100% 100%;
     }
 }
+
+.random-pick-marker {
+    transform: translateX(-50%) translateY(-48px);
+    @apply relative w-8 h-16 overflow-hidden;
+
+    .rain {
+        position: absolute;
+        width: 1px;
+        left: 50%;
+        height: 100%;
+        animation: pickRainAnimation 1s ease-in-out;
+        opacity: 0;
+        @apply border-x border-[red];
+    }
+    .drop {
+        position: absolute;
+        left: 50%; /* 수평 중앙 정렬 */
+        bottom: 0%; /* 아래에서 20% 지점에 배치 */
+        width: 4px; /* 초기 너비 */
+        height: 2px; /* 초기 높이 */
+        border-radius: 50%; /* 타원 형태 */
+        transform: translateX(-50%) translateY(-50%); /* 정확한 중앙 정렬을 위해 이동 */
+        animation: pickDropAnimation 1s ease-in-out; /* 애니메이션 설정 */
+        opacity: 0;
+        @apply border border-[red] bg-red-500/50;
+    }
+}
+@keyframes pickRainAnimation {
+    0% {
+        height: 100%;
+        bottom: 100%;
+        opacity: 1;
+    }
+    50% {
+        height: 100%;
+        bottom: 8%;
+    }
+    99% {
+        height: 0%;
+        bottom: 8%;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+@keyframes pickDropAnimation {
+    0% {
+        opacity: 0;
+    }
+    44% {
+        opacity: 0;
+    }
+    45% {
+        width: 4px;
+        height: 2px;
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%);
+    }
+    99% {
+        width: 28px;
+        height: 14px;
+        opacity: 0.3;
+        transform: translateX(-50%) translateY(0%);
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+.result-marker {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-left: -115px;
+    
+    border-radius: 50% 50% 50% 0;
+    border: 4px solid blue;
+    width: 40px;
+    height: 40px;
+    transform: rotate(-45deg);
+  }
+  
+  .result-marker::after {
+    position: absolute;
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -5px;
+    background-color: blue;
+  }
