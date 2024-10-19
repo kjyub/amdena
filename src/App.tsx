@@ -6,10 +6,10 @@ import { Coordinates } from './types/game/Coordinates'
 import { AreaMethodTypes, GameTypes } from './types/ControlTypes'
 
 function App() {
-    const [map, setMap] = useState<google.maps.Map>(null)
+    const [map, setMap] = useState<google.maps.Map | null>(null)
     const [selectedArea, setSelectedArea] = useState<Coordinates>([])
 
-    const [areaMethodType, setAreaMethodType] = useState<AreaMethsodTypes>(AreaMethodTypes.ALL)
+    const [areaMethodType, setAreaMethodType] = useState<AreaMethodTypes>(AreaMethodTypes.ALL)
     const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.NONE)
     const [isGameStart, setGameStart] = useState<boolean>(false)
 

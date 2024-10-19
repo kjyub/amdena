@@ -48,7 +48,7 @@ export default function MapBase({
     const mapRef = useRef<HTMLElement>(null)
     const [center, setCenter] = useState(initialCenter)
     const [address, setAddress] = useState("대한민국 서울특별시")
-    const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult>(null)
+    const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null)
 
     // 직접 선택 다각형 만들기
     const [drawPaths, setDrawPaths] = useState<Coordinates>([])
@@ -104,7 +104,7 @@ export default function MapBase({
         setMap(map)
     }, [])
   
-    const onUnmount = useCallback(function callback(map) {
+    const onUnmount = useCallback(function callback(map: any) {
         setMap(null)
     }, [])
  

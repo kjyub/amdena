@@ -8,7 +8,7 @@ interface IControlGame {
     setRandomGameType: React.Dispatch<React.SetStateAction<GameTypes>>
 }
 export default function ControlGame({randomGameType, setRandomGameType}: IControlGame) {
-    const [areaMethodType, setAreaMethodType] = useState<AreaMethsodTypes>(AreaMethodTypes.ALL)
+    const [areaMethodType, setAreaMethodType] = useState<AreaMethsoAreaMethodTypesdTypes>(AreaMethodTypes.ALL)
     
     const handleAreaMethod = (type: AreaMethodTypes) => {
         if (type === areaMethodType) {

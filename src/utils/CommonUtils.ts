@@ -32,18 +32,13 @@ export default class CommonUtils {
     static getCurrentBaseUrl(): string {
         return window.location.href.split("/").slice(0, 3).join("/")
     }
-    static async copyClipboard(value: string): boolean {
+    static async copyClipboard(value: string): Promise<boolean> {
         try {
             await navigator.clipboard.writeText(value)
         } catch (e) {
             return false
         }
         return true
-    }
-    static sha256(value: string): string {
-        const hash = crypto.createHash("sha256")
-        hash.update(value)
-        return hash.digest("hex")
     }
     static telFormat(v: string): string {
         let value = v.replace(/[^0-9]/g, "")
