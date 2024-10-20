@@ -6,13 +6,14 @@ export const Layout = tw.div`
     max-desktop:left-0 max-desktop:bottom-0
     desktop:right-0 desktop:top-0
     flex flex-col
-    max-desktop:w-full max-desktop:max-h-[24rem]
+    max-desktop:w-full max-desktop:h-80
     desktop:w-80 desktop:p-4
     bg-transparent
+    overflow-y-auto scroll-transparent scroll-overlay
 `
 
 export const Panel = tw.div`
-    flex flex-col p-4 space-y-8
+    flex flex-col p-4 max-desktop:pb-20 space-y-8
     max-desktop:w-full
     desktop:w-full
     rounded-xl max-desktop:rounded-b-none
@@ -30,20 +31,25 @@ export const ControlBox = tw.div`
     flex flex-col w-full space-y-2
 `
 
+export const GameControlLayout = tw.div`
+    fixed bottom-0 left-0 w-full p-4 pt-0
+    bg-sand-100/70 backdrop-blur
+`
 export const GameStartButton = tw.button`
     w-full h-10
-    rounded-lg bg-amber-200
-    text-amber-700
+    rounded-lg 
+    bg-amber-200 text-amber-700
+    disabled:bg-sand-300 disabled:text-sand-700
 `
 
 export const AreaMethodBox = tw.div`
-    grid grid-cols-2 gap-1 w-full h-8
+    grid grid-cols-2 gap-1 w-full max-desktop:h-7 desktop:h-8
 `
 export const AreaMethodButton = tw.button<StyleProps>`
     flex justify-center items-center w-full
     rounded-lg
     ${({ $is_active }) => $is_active ? "bg-red-200" : "hover:bg-red-100"}
-    text-red-700
+    text-red-700 max-desktop:text-sm
     duration-200
     select-none
 `

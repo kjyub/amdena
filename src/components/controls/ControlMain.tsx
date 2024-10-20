@@ -29,7 +29,21 @@ export default function ControlMain({
     isGameStart,
     setGameStart,
 }: IControlMain) {
+    const isAvailGameStart = selectedArea.length > 0 && randomGameType !== GameTypes.NONE
 
+    const handleGameStart = () => {
+        if (selectedArea.length === 0) {
+            alert("영역을 설정해주세요")
+            return
+        }
+
+        if (randomGameType === GameTypes.NONE) {
+            alert("게임 종류를 선택해주세요")
+            return
+        }
+
+        setGameStart(true)
+    }
     return (
         <CS.Layout>
             <CS.Panel>
@@ -44,11 +58,22 @@ export default function ControlMain({
                 <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
 
                 <CS.GameStartButton
-                    onClick={() => {setGameStart(true)}}
+                    onClick={() => {handleGameStart()}}
+                    disabled={!isAvailGameStart}
+                    className="max-desktop:hidden"
                 >
                     <span>게임 시작</span>
                 </CS.GameStartButton>
             </CS.Panel>
+
+            <CS.GameControlLayout className="desktop:hidden">
+                <CS.GameStartButton
+                    onClick={() => {handleGameStart()}}
+                    disabled={!isAvailGameStart}
+                >
+                    <span>게임 시작</span>
+                </CS.GameStartButton>
+            </CS.GameControlLayout>
         </CS.Layout>
     )
 }
