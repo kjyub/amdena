@@ -82,7 +82,6 @@ export default function MapBase({
 
     // 게임 시작 감지
     useEffect(() => {
-        setResultCoord(null)
         if (randomGameType === GameTypes.RANDOM) {
             if (isGameStart && selectedArea.length > 0) {
                 startRandomPick()
@@ -204,6 +203,8 @@ export default function MapBase({
             </MS.Layout>
         )
     }
+
+    console.log(resultCoord)
 
     const initialOptions: google.maps.MapOptions = {
         streetViewControl: false,
