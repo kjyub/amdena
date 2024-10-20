@@ -39,10 +39,10 @@ export const GameStartButton = tw.button`
 export const AreaMethodBox = tw.div`
     grid grid-cols-2 gap-1 w-full h-8
 `
-export const AreaMethodButton = tw.button`
+export const AreaMethodButton = tw.button<StyleProps>`
     flex justify-center items-center w-full
     rounded-lg
-    ${({ $is_active }: StyleProps) => $is_active ? "bg-red-200" : "hover:bg-red-100"}
+    ${({ $is_active }) => $is_active ? "bg-red-200" : "hover:bg-red-100"}
     text-red-700
     duration-200
     select-none
@@ -72,9 +72,9 @@ export const PlaceSearchInput = tw.input`
     text-sm text-snad-800
     outline-none
 `
-export const PlaceSearchResult = tw.div`
+export const PlaceSearchResult = tw.div<StyleProps>`
     absolute top-10
-    ${({ $is_show }: StyleProps) => $is_show ? "z-20 translate-y-0 opacity-100" : "-z-10 -translate-y-4 opacity-0"}
+    ${({ $is_show }) => $is_show ? "z-20 translate-y-0 opacity-100" : "-z-10 -translate-y-4 opacity-0"}
     flex flex-col w-full max-h-[384px] p-2 space-y-1
     rounded-xl bg-sand-100
     overflow-y-auto scroll-transparent scroll-overlay

@@ -8,7 +8,7 @@ import ControlAreaSearch from "./ControlAreaSearch"
 import { Coordinates } from "@/types/game/Coordinates"
 
 interface IControlMain {
-    map: google.maps.Map
+    map: google.maps.Map | null
     selectedArea: Coordinates
     setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>
     areaMethodType: AreaMethodTypes

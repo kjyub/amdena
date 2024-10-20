@@ -7,21 +7,25 @@ import axios from "axios"
 import { Coordinates } from "@/types/game/Coordinates"
 
 interface IControlAreaSearch {
-    map: google.maps.Map
+    map: google.maps.Map | null
     setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>
 }
-export default function ControlAreaSearch({ map, address, setSelectedArea }: IControlAreaSearch) {
+export default function ControlAreaSearch({ map, setSelectedArea }: IControlAreaSearch) {
     const [isPlaceResultShow, setPlaceResultShow] = useState<boolean>(false)
     const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
 
     const autocompleteRef = useRef<Autocomplete>(null)
-    const autocompleteService = useRef<google.maps.places.AutocompleteService>(null)
+    const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null)
 
-    const placesService = useRef(null)
+    const placesService = useRef<unknown>(null)
 
     useEffect(() => {
-        autocompleteService.current = google.maps.places.AutocompleteService()
+        if (!autocompleteRef.current) {
+            return
+        }
+
+        autocompleteService.current = new google.maps.places.AutocompleteService()
     }, [])
 
     useEffect(() => {
@@ -38,12 +42,16 @@ export default function ControlAreaSearch({ map, address, setSelectedArea }: ICo
             autocompleteService.current = new window.google.maps.places.AutocompleteService()
         }
 
+        if (!autocompleteService.current) {
+            return
+        }
+
         if (CommonUtils.isStringNullOrEmpty(value)) {
             return
         }
 
         autocompleteService.current.getPlacePredictions({ input: value }, (predictions, status) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK) {
+            if (status !== google.maps.places.PlacesServiceStatus.OK || predictions === null) {
                 return
             }  
 
@@ -51,14 +59,18 @@ export default function ControlAreaSearch({ map, address, setSelectedArea }: ICo
         })
     }
 
-    const handlePlaceSelect = (placeId) => {
-        if (!placesService.current && window.google) {
-            placesService.current = new window.google.maps.places.PlacesService(map)
+    const handlePlaceSelect = (placeId: string) => {
+        if (!placesService.current && window.google && map !== null) {
+            placesService.current = new google.maps.places.PlacesService(map)
+        }
+
+        if (!placesService.current) {
+            return
         }
 
         // `placeId`를 사용해 장소의 상세 정보 요청
         placesService.current.getDetails({ placeId }, (place, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
                 const area: Coordinates = [
                     { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getNorthEast().lng() },
                     { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getSouthWest().lng() },

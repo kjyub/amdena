@@ -26,8 +26,8 @@ const initialCenter = {
 }
 
 interface IMapBase {
-    map: google.maps.Map
-    setMap: React.Dispatch<React.SetStateAction<google.maps.Map>>
+    map: google.maps.Map | null
+    setMap: React.Dispatch<React.SetStateAction<google.maps.Map | null>>
     selectedArea: Coordinates    
     setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>
     areaMethodType: AreaMethodTypes

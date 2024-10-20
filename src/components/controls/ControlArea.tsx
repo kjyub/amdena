@@ -10,7 +10,7 @@ const boxWidth = 100
 const boxHeight = 100
 
 interface IControlArea {
-    map: google.maps.Map
+    map: google.maps.Map | null
     areaMethodType: AreaMethodTypes
     setAreaMethodType: React.Dispatch<React.SetStateAction<AreaMethodTypes>>
     selectedArea: Coordinates
