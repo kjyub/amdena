@@ -19,6 +19,14 @@ function App() {
         setGameStart(false)
     }, [areaMethodType])
 
+    useEffect(() => {
+        setScreenSize()
+    })
+    
+    function setScreenSize() {
+        let vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty("--vh", `${vh}px`)
+    }
 
     return (
         <>
