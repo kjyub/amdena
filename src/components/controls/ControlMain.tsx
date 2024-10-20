@@ -29,6 +29,8 @@ export default function ControlMain({
     isGameStart,
     setGameStart,
 }: IControlMain) {
+    const [isMobileControlShow, setMobileControlShow] = useState<boolean>(false)
+
     const isAvailGameStart = selectedArea.length > 0 && randomGameType !== GameTypes.NONE
 
     const handleGameStart = () => {
@@ -44,36 +46,48 @@ export default function ControlMain({
 
         setGameStart(true)
     }
+    
     return (
-        <CS.Layout>
-            <CS.Panel>
-                <ControlArea 
-                    map={map} 
-                    areaMethodType={areaMethodType} 
-                    setAreaMethodType={setAreaMethodType}  
-                    selectedArea={selectedArea}
-                    setSelectedArea={setSelectedArea} 
-                />
+        <>
+            <CS.Layout
+                $is_show={isMobileControlShow}
+            >
+                <CS.Panel>
+                    <ControlArea 
+                        map={map} 
+                        areaMethodType={areaMethodType} 
+                        setAreaMethodType={setAreaMethodType}  
+                        selectedArea={selectedArea}
+                        setSelectedArea={setSelectedArea} 
+                    />
 
-                <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
+                    <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
 
-                <CS.GameStartButton
-                    onClick={() => {handleGameStart()}}
-                    disabled={!isAvailGameStart}
-                    className="max-desktop:hidden"
-                >
-                    <span>게임 시작</span>
-                </CS.GameStartButton>
-            </CS.Panel>
+                    <CS.GameStartButton
+                        onClick={() => {handleGameStart()}}
+                        disabled={!isAvailGameStart}
+                        className="max-desktop:hidden"
+                    >
+                        <span>게임 시작</span>
+                    </CS.GameStartButton>
+                </CS.Panel>
 
-            <CS.GameControlLayout className="desktop:hidden">
-                <CS.GameStartButton
-                    onClick={() => {handleGameStart()}}
-                    disabled={!isAvailGameStart}
-                >
-                    <span>게임 시작</span>
-                </CS.GameStartButton>
-            </CS.GameControlLayout>
-        </CS.Layout>
+                <CS.GameControlLayout className="desktop:hidden">
+                    <CS.GameStartButton
+                        onClick={() => {handleGameStart()}}
+                        disabled={!isAvailGameStart}
+                    >
+                        <span>게임 시작</span>
+                    </CS.GameStartButton>
+                </CS.GameControlLayout>
+            </CS.Layout>
+
+            <CS.ToggleMobileControl 
+                $is_show={isMobileControlShow}
+                onClick={() => {setMobileControlShow(!isMobileControlShow)}}
+            >
+                {isMobileControlShow ? "접기" : "펼치기"}
+            </CS.ToggleMobileControl>
+        </>
     )
 }

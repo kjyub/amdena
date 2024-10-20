@@ -1,15 +1,17 @@
 import { StyleProps } from "@/types/StyleTypes"
 import tw from "tailwind-styled-components"
 
-export const Layout = tw.div`
+export const Layout = tw.div<StyleProps>`
     absolute z-10
-    max-desktop:left-0 max-desktop:bottom-0
+    max-desktop:left-0 
+    ${({ $is_show }) => $is_show ? "max-desktop:bottom-0" : "max-desktop:-bottom-56"}
     desktop:right-0 desktop:top-0
     flex flex-col
     max-desktop:w-full max-desktop:h-80
     desktop:w-80 desktop:p-4
     bg-transparent
     overflow-y-auto scroll-transparent scroll-overlay
+    duration-300
 `
 
 export const Panel = tw.div`
@@ -103,4 +105,13 @@ export const ResultBox = tw.div`
     [&>.control>.more]:ml-auto [&>.control>.more]:px-2 [&>.control>.more]:py-1
     [&>.control>.more]:text-sm [&>.control>.more]:text-sand-600
     [&>.control>.more]:rounded-lg hover:[&>.control>.more]:bg-sand-300/50 [&>.control>.more]:duration-200
+`
+
+export const ToggleMobileControl = tw.button`
+    absolute z-50  right-4
+    ${({ $is_show }) => $is_show ? "bottom-[21rem]" : "bottom-[7em]"}
+    flex flex-center px-4 py-2
+    rounded-full bg-sand-100/70 backdrop-blur
+    text-sand-800 font-medium
+    duration-300
 `
