@@ -6,8 +6,9 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 
 interface IMarkerResult {
     position: Coordinate
+    onClick: () => void
 }
-export default function MarkerResult({ position }: IMarkerResult) {
+export default function MarkerResult({ position, onClick }: IMarkerResult) {
     const [value, setValue] = useState<string>("")
 
     useEffect(() => {
@@ -27,7 +28,9 @@ export default function MarkerResult({ position }: IMarkerResult) {
         <div className="relative w-8 h-8">
             {/* <div className="result-marker">
             </div> */}
-            <div className="absolute w-6 h-6 bg-red-500 rounded-full animate-ping">
+            <div className="absolute w-6 h-6 bg-red-500 rounded-full animate-ping"
+                onClick={() => {onClick()}}
+            >
             </div>
             <CS.ResultBox>
                 <span className="value">

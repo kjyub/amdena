@@ -204,8 +204,6 @@ export default function MapBase({
         )
     }
 
-    console.log(resultCoord)
-
     const initialOptions: google.maps.MapOptions = {
         streetViewControl: false,
         fullscreenControl: false,
@@ -213,6 +211,7 @@ export default function MapBase({
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
             position: google.maps.ControlPosition.LEFT_BOTTOM,
         },
+        gestureHandling: "greedy",
     }
 
     return (
@@ -298,10 +297,10 @@ export default function MapBase({
                             x: -(width / 2),
                             y: -height,
                         })}
-                        onClick={() => {handleResultClick()}}
                     >
                         <MarkerResult 
                             position={resultCoord}
+                            onClick={() => {handleResultClick()}}
                         />
                     </OverlayView>
                 )}
