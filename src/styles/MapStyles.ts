@@ -14,6 +14,7 @@ export const MapInfoBox = tw.div`
     border border-sand-300
 `
 export const AddressMain = tw.span`
+    px-1
     max-phablet:text-base phablet:text-xl 
     text-sand-800 font-semibold
 `

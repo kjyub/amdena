@@ -6,6 +6,7 @@ import { AreaMethodTypes, GameTypes } from "@/types/ControlTypes"
 import React, { useEffect, useState } from "react"
 import ControlAreaSearch from "./ControlAreaSearch"
 import { Coordinates } from "@/types/game/Coordinates"
+import ModalContainer from "../ModalContainer"
 
 interface IControlMain {
     map: google.maps.Map | null
@@ -17,6 +18,10 @@ interface IControlMain {
     setRandomGameType: React.Dispatch<React.SetStateAction<GameTypes>>
     isGameStart: boolean
     setGameStart: React.Dispatch<React.SetStateAction<boolean>>
+    isShowResultMarker: boolean
+    setShowResultMarker: React.Dispatch<React.SetStateAction<boolean>>
+    isShowResultList: boolean
+    setShowResultList: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function ControlMain({ 
     map, 
@@ -28,8 +33,14 @@ export default function ControlMain({
     setRandomGameType,
     isGameStart,
     setGameStart,
+    isShowResultMarker,
+    setShowResultMarker,
+    isShowResultList,
+    setShowResultList,
 }: IControlMain) {
     const [isMobileControlShow, setMobileControlShow] = useState<boolean>(false)
+
+    const [isShowResultListModal, setShowResultListModal] = useState<boolean>(false)
 
     const isAvailGameStart = selectedArea.length > 0 && randomGameType !== GameTypes.NONE
 
@@ -78,6 +89,27 @@ export default function ControlMain({
                     />
 
                     <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
+
+                    <CS.ToolBox>
+                        <CS.ToolBoxButton
+                            $is_active={isShowResultMarker}
+                            onClick={() => {setShowResultMarker(!isShowResultMarker)}}
+                        >
+                            <i className="fa-solid fa-location-dot"></i>
+                            <span>
+                                이전 결과 마커
+                            </span>
+                        </CS.ToolBoxButton>
+                        <CS.ToolBoxButton
+                            $is_active={isShowResultList}
+                            onClick={() => {setShowResultList(!isShowResultList)}}
+                        >
+                            <i className="fa-solid fa-list-ul"></i>
+                            <span>
+                                이전 결과 목록
+                            </span>
+                        </CS.ToolBoxButton>
+                    </CS.ToolBox>
 
                     <CS.GameControlLayoutDesktop className="max-desktop:hidden">
                         {GameControl}

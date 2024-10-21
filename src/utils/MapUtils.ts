@@ -27,11 +27,15 @@ export default class MapUtils {
 
         return geocode
     }
-    static async getMapAddress(lat: number, lng: number): string {
+    static async getMapAddress(lat: number, lng: number): Promise<string> {
         let address = ""
 
-        const geocode = await this.getGeocode(lat, lng)
-        address = geocode.formatted_address
+        try {
+            const geocode = await this.getGeocode(lat, lng)
+            address = geocode.formatted_address
+        } catch {
+            //
+        }
 
         return address
     }
@@ -109,7 +113,6 @@ export default class MapUtils {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.beginPath()
         finalCoords.forEach((coord, idx) => {
-            console.log(coord.lng, coord.lat)
             if (idx === 0) {
                 ctx.moveTo(coord.lng, coord.lat)
             } else {

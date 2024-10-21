@@ -2,8 +2,6 @@ import CommonUtils from "@/utils/CommonUtils"
 import React, { Dispatch, SetStateAction } from "react"
 import tw from "tailwind-styled-components"
 import Modal from "react-modal"
-import Image from "next/image"
-import iconClose from "@/static/icons/Close.svg"
 
 const Background = tw.div`
     flex flex-center w-full h-full
@@ -55,9 +53,8 @@ const ModalContainer = ({
                     onClick={handleStopPropagation}
                 >
                     {(!isCloseByBackground || isCloseButtonShow) && (
-                        <Image
-                            className="absolute top-5 right-5 cursor-pointer"
-                            src={iconClose}
+                        <i
+                            className="absolute top-5 right-5 cursor-pointer fa-solid fa-xmark"
                             alt="닫기"
                             onClick={() => setIsOpen(false)}
                         />

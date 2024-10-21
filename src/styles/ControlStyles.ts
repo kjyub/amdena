@@ -10,18 +10,18 @@ export const Layout = tw.div<StyleProps>`
     max-desktop:w-full max-desktop:h-80
     desktop:w-80 desktop:p-4
     bg-transparent
-    overflow-y-auto scroll-transparent scroll-overlay
     duration-300
 `
 
 export const Panel = tw.div`
     relative
-    flex flex-col p-4 space-y-8
-    max-desktop:w-full max-desktop:h-full
+    flex flex-col p-4 space-y-2
+    max-desktop:w-full max-desktop:h-full max-desktop:pb-16
     desktop:w-full
     rounded-xl max-desktop:rounded-b-none
     bg-sand-100/70 backdrop-blur
     border border-sand-300
+    overflow-y-auto scroll-transparent scroll-overlay
 `
 
 export const ControlExplain = tw.div`
@@ -57,6 +57,17 @@ export const GameResetButton = tw(GameControlButton)`
     w-24
     bg-red-200 hover:bg-red-300 text-red-700
     disabled:bg-sand-300 disabled:text-sand-700
+`
+
+export const ToolBox = tw.div`
+    flex w-full space-x-2
+`
+export const ToolBoxButton = tw.button`
+    flex flex-center w-full px-2 py-1 space-x-1
+    rounded-md
+    ${({ $is_active }) => !$is_active ? "bg-transparent hover:bg-sand-400/30" : "bg-sand-400/20"}
+    text-sm text-sand-600
+    duration-200
 `
 
 export const AreaMethodBox = tw.div`
@@ -111,15 +122,19 @@ export const PlaceSearchResult = tw.div<StyleProps>`
 
 export const ResultBox = tw.div`
     absolute z-50 bottom-12 -left-32
-    flex flex-row justify-between items-start w-72 p-2 space-x-1
+    flex flex-row justify-between items-start w-72 px-2 py-1 space-x-1
     rounded-lg bg-sand-100/70 backdrop-blur
 
     [&>.value]:text-sm [&>.value]:text-sand-700 [&>.value]:font-medium
-    [&>.value]:text-left
+    [&>.value]:text-left [&>.value]:pl-1
     [&>.control]:flex [&>.control]:flex-shrink-0 [&>.control]:justify-end [&>.control]:items-center [&>.control]:space-x-2
     [&>.control>.more]:ml-auto [&>.control>.more]:px-2 [&>.control>.more]:py-1
     [&>.control>.more]:text-sm [&>.control>.more]:text-sand-600
     [&>.control>.more]:rounded-lg hover:[&>.control>.more]:bg-sand-300/50 [&>.control>.more]:duration-200
+`
+export const OldResultBox = tw(ResultBox)`
+    bg-purple-100/70
+    hover:[&>.control>.more]:bg-purple-300/50
 `
 
 export const ToggleMobileControl = tw.button`
@@ -129,4 +144,23 @@ export const ToggleMobileControl = tw.button`
     rounded-full bg-sand-100/70 backdrop-blur
     text-sand-800 font-medium
     duration-300
+`
+
+export const ResultListLayout = tw.div`
+    flex flex-col w-72 max-h-[80vh] p-3 space-y-3
+    rounded-2xl bg-sand-100/70 backdrop-blur
+    border border-sand-300
+
+    [&>.title]:px-2 [&>.title]:text-lg [&>.title]:text-sand-800 [&>.title]:font-semibold
+`
+export const ResultListBoxList = tw.div`
+    flex flex-col w-full space-y-2
+    overflow-y-auto scroll-transparent scroll-overlay
+
+    [&>.item]:flex [&>.item]:flex-col [&>.item]:w-full [&>.item]:px-3 [&>.item]:py-2
+    [&>.item]:rounded-xl hover:[&>.item]:bg-stone-300/50
+    [&>.item]:cursor-pointer
+
+    [&>.item>.address]:text-base [&>.item>.address]:text-sand-800 [&>.item>.address]:font-medium
+    [&>.item>.created]:text-sm [&>.item>.created]:text-sand-600
 `

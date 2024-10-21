@@ -13,6 +13,9 @@ function App() {
     const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.NONE)
     const [isGameStart, setGameStart] = useState<boolean>(false)
 
+    const [isShowResultMarker, setShowResultMarker] = useState<boolean>(false)
+    const [isShowResultList, setShowResultList] = useState<boolean>(false)
+
     useEffect(() => {
         setSelectedArea([])
         setRandomGameType(GameTypes.NONE)
@@ -39,6 +42,9 @@ function App() {
                 isGameStart={isGameStart}
                 setGameStart={setGameStart}
                 randomGameType={randomGameType}
+                isShowResultMarker={isShowResultMarker}
+                isShowResultList={isShowResultList}
+                setShowResultList={setShowResultList}
             />
             <ControlMain 
                 map={map} 
@@ -50,6 +56,10 @@ function App() {
                 setRandomGameType={setRandomGameType}
                 isGameStart={isGameStart}
                 setGameStart={setGameStart}
+                isShowResultMarker={isShowResultMarker}
+                setShowResultMarker={setShowResultMarker}
+                isShowResultList={isShowResultList}
+                setShowResultList={setShowResultList}
             />
         </>
     )

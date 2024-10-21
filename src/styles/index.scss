@@ -1,3 +1,5 @@
+@import url("https://webfontworld.github.io/pretendard/Pretendard.css");
+
 /* src/styles/index.scss */
 @tailwind base;
 @tailwind components;
@@ -7,6 +9,11 @@
 
 :root {
     --vh: 100%;
+}
+
+body {
+    font-family: "Pretendard", sans-serif !important;
+    line-height: normal;
 }
 
 #root {

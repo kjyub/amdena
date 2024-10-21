@@ -1,4 +1,5 @@
 import * as MS from "@/styles/MapStyles"
+import * as CS from "@/styles/ControlStyles"
 import CommonUtils from "@/utils/CommonUtils"
 import {Status, Wrapper} from "@googlemaps/react-wrapper"
 import { useCallback, useEffect, useRef, useState } from "react"
@@ -17,6 +18,10 @@ import { get } from "node_modules/axios/index.cjs"
 import { l } from "node_modules/vite/dist/node/types.d-aGj9QkWt"
 import GameUtils from "@/utils/GameUtils"
 import MarkerResult from "./markers/MarkerResult"
+import GameResult from "@/types/game/GameResult"
+import MarkerOldResult from "./markers/MarkerOldResult"
+import ModalContainer from "../ModalContainer"
+import dayjs from "dayjs"
 
 const initialZoom = 8
 const boundPadding = 0.1
@@ -35,6 +40,9 @@ interface IMapBase {
     isGameStart: boolean
     setGameStart: React.Dispatch<React.SetStateAction<boolean>>
     randomGameType: GameTypes
+    isShowResultMarker: boolean
+    isShowResultList: boolean
+    setShowResultList: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function MapBase({ 
     map, 
@@ -45,6 +53,9 @@ export default function MapBase({
     isGameStart,
     setGameStart,
     randomGameType,
+    isShowResultMarker,
+    isShowResultList,
+    setShowResultList,
 }: IMapBase) {
     const mapRef = useRef<HTMLElement>(null)
     const [center, setCenter] = useState(initialCenter)
@@ -63,6 +74,9 @@ export default function MapBase({
 
     // 결과픽
     const [resultCoord, setResultCoord] = useState<Coordinate | null>(null)
+
+    // 이전 결과
+    const [oldResults, setOldResults] = useState<GameResult[]>([])
 
 
     useEffect(() => {
@@ -93,6 +107,13 @@ export default function MapBase({
         }
     }, [isGameStart, randomGameType])
 
+    useEffect(() => {
+        if (isShowResultMarker || isShowResultList) {
+            const _oldResults = GameUtils.getResults()
+            setOldResults(_oldResults)
+        }
+    }, [isShowResultMarker, isShowResultList])
+
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY as string,
@@ -109,11 +130,12 @@ export default function MapBase({
     }, [])
  
     // region 지도 관련 함수
+    // 다각형 그리기
     const handleMapClick = (e: google.maps.MapMouseEvent) => {
-        // 다각형 그리기
         if (isDrawPath) {
             const drawCoord = { lat: e.latLng.lat(), lng: e.latLng.lng() }
             const _drawPaths = [...drawPaths, drawCoord]
+            console.log(_drawPaths)
             setDrawPaths(_drawPaths)
 
             if (_drawPaths.length > 2) {
@@ -185,19 +207,23 @@ export default function MapBase({
             await CommonUtils.delay(delay)
         }
 
-        setResultCoord(MapUtils.getRandomCoordinate(selectedArea))
+        const _resultCoord = MapUtils.getRandomCoordinate(selectedArea)
+        const _resultAddress = await MapUtils.getMapAddress(_resultCoord.lat, _resultCoord.lng)
+        const _result = new GameResult(_resultCoord, _resultAddress)
+        setResultCoord(_resultCoord)
         setGameStart(false)
+        GameUtils.saveResult(_result)
     }
     // endregion
 
-    const handleResultClick = () => {
+    const handleMarkerMove = (coord: Coordinate) => {
         const halfPadding = boundPadding / 2
 
         const bounds = new google.maps.LatLngBounds()
-        bounds.extend({ lat: resultCoord.lat + halfPadding, lng: resultCoord.lng + halfPadding })
-        bounds.extend({ lat: resultCoord.lat + halfPadding, lng: resultCoord.lng - halfPadding })
-        bounds.extend({ lat: resultCoord.lat - halfPadding, lng: resultCoord.lng + halfPadding })
-        bounds.extend({ lat: resultCoord.lat - halfPadding, lng: resultCoord.lng - halfPadding })
+        bounds.extend({ lat: coord.lat + halfPadding, lng: coord.lng + halfPadding })
+        bounds.extend({ lat: coord.lat + halfPadding, lng: coord.lng - halfPadding })
+        bounds.extend({ lat: coord.lat - halfPadding, lng: coord.lng + halfPadding })
+        bounds.extend({ lat: coord.lat - halfPadding, lng: coord.lng - halfPadding })
         map.fitBounds(bounds)
 
         const boundCenter = bounds.getCenter()
@@ -288,7 +314,7 @@ export default function MapBase({
                     <Marker
                         position={drawPaths[0]}
                         title="현재 위치"
-                        onClick={handleMapClick}
+                        onClick={handleDrawEnd}
                     />
                 )}
 
@@ -323,11 +349,55 @@ export default function MapBase({
                     >
                         <MarkerResult 
                             position={resultCoord}
-                            onClick={() => {handleResultClick()}}
+                            onClick={() => {handleMarkerMove(resultCoord)}}
                         />
                     </OverlayView>
                 )}
+
+                {isShowResultMarker && (
+                    oldResults.map((result, idx) => (
+                        <OverlayView
+                            position={result.coord}
+                            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+                            getPixelPositionOffset={(width, height) => ({
+                                x: -(width / 2),
+                                y: -height,
+                            })}
+                        >
+                            <MarkerOldResult 
+                                result={result}
+                                onClick={() => {handleMarkerMove(result.coord)}}
+                            />
+                        </OverlayView>
+                    ))
+                )}
             </GoogleMap>
+
+
+            <ModalContainer
+                isOpen={isShowResultList}
+                setIsOpen={setShowResultList}
+            >
+                <CS.ResultListLayout>
+                    <span className="title">
+                        이전 결과 목록
+                    </span>
+
+                    <CS.ResultListBoxList>
+                        {oldResults.map((result, idx) => (
+                            <div key={idx} className="item" onClick={() => {handleMarkerMove(result.coord)}}>
+                                <span className="address">
+                                    {!CommonUtils.isStringNullOrEmpty(result.address) ? result.address : "-"}
+                                </span>
+                                <span className="created">
+                                    <i className="fa-regular fa-clock mr-1 text-xs"></i>
+                                    {dayjs(result.created).format("YYYY-MM-DD HH:mm:ss")}
+                                </span>
+                            </div>
+                        ))}
+                    </CS.ResultListBoxList>
+                </CS.ResultListLayout>
+            </ModalContainer>
         </MS.Layout>
     )
 }
