@@ -111,7 +111,8 @@ export default function MapBase({
     const handleMapClick = (e: google.maps.MapMouseEvent) => {
         // 다각형 그리기
         if (isDrawPath) {
-            const _drawPaths = [...drawPaths, { lat: e.latLng.lat(), lng: e.latLng.lng() }]
+            const drawCoord = { lat: e.latLng.lat(), lng: e.latLng.lng() }
+            const _drawPaths = [...drawPaths, drawCoord]
             setDrawPaths(_drawPaths)
 
             if (_drawPaths.length > 2) {
@@ -259,13 +260,14 @@ export default function MapBase({
                             strokeWeight: 4,
                             fillOpacity: 0.35,
                         }}
+                        onClick={handleMapClick}
                     />
                 )}
                 {drawPaths.length >= 1 && (
                     <Marker
                         position={drawPaths[0]}
                         title="현재 위치"
-                        onClick={() => {handleDrawEnd()}}
+                        onClick={handleMapClick}
                     />
                 )}
 
