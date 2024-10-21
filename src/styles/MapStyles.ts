@@ -9,10 +9,11 @@ export const Layout = tw.div`
 
 export const MapInfoBox = tw.div`
     absolute left-4 top-4 z-10
-    flex flex-col items-start max-phablet:w-[calc(100%-2rem)] phablet:w-96 p-3 space-y-2
+    flex flex-col items-start max-phablet:w-[calc(100%-2rem)] phablet:w-96 max-phablet:p-2 phablet:p-3 space-y-2
     rounded-xl bg-sand-100/60 backdrop-blur
     border border-sand-300
 `
 export const AddressMain = tw.span`
-    text-xl text-sand-800 font-semibold
+    max-phablet:text-base phablet:text-xl 
+    text-sand-800 font-semibold
 `

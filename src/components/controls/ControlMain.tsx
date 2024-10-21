@@ -46,7 +46,23 @@ export default function ControlMain({
 
         setGameStart(true)
     }
-    
+
+    const GameControl = (
+        <div className="flex items-center w-full space-x-2">
+            <CS.GameStartButton
+                onClick={() => {handleGameStart()}}
+                disabled={!isAvailGameStart}
+            >
+                <span>게임 시작</span>
+            </CS.GameStartButton>
+            <CS.GameResetButton
+                onClick={() => {setAreaMethodType(AreaMethodTypes.ALL)}}
+            >
+                <span>초기화</span>
+            </CS.GameResetButton>
+        </div>
+    )
+
     return (
         <>
             <CS.Layout
@@ -63,23 +79,14 @@ export default function ControlMain({
 
                     <ControlGame randomGameType={randomGameType} setRandomGameType={setRandomGameType} />
 
-                    <CS.GameStartButton
-                        onClick={() => {handleGameStart()}}
-                        disabled={!isAvailGameStart}
-                        className="max-desktop:hidden"
-                    >
-                        <span>게임 시작</span>
-                    </CS.GameStartButton>
+                    <CS.GameControlLayoutDesktop className="max-desktop:hidden">
+                        {GameControl}
+                    </CS.GameControlLayoutDesktop>
                 </CS.Panel>
 
-                <CS.GameControlLayout className="desktop:hidden">
-                    <CS.GameStartButton
-                        onClick={() => {handleGameStart()}}
-                        disabled={!isAvailGameStart}
-                    >
-                        <span>게임 시작</span>
-                    </CS.GameStartButton>
-                </CS.GameControlLayout>
+                <CS.GameControlLayoutMobile className="desktop:hidden">
+                    {GameControl}
+                </CS.GameControlLayoutMobile>
             </CS.Layout>
 
             <CS.ToggleMobileControl 

@@ -15,8 +15,9 @@ export const Layout = tw.div<StyleProps>`
 `
 
 export const Panel = tw.div`
-    flex flex-col p-4 max-desktop:pb-20 space-y-8
-    max-desktop:w-full
+    relative
+    flex flex-col p-4 space-y-8
+    max-desktop:w-full max-desktop:h-full
     desktop:w-full
     rounded-xl max-desktop:rounded-b-none
     bg-sand-100/70 backdrop-blur
@@ -33,14 +34,28 @@ export const ControlBox = tw.div`
     flex flex-col w-full space-y-2
 `
 
-export const GameControlLayout = tw.div`
-    fixed bottom-0 left-0 w-full p-4 pt-0
+export const GameControlLayoutDesktop = tw.div`
+    flex items-center w-full space-x-2
+`
+export const GameControlLayoutMobile = tw(GameControlLayoutDesktop)`
+    fixed bottom-0 left-0 
+    p-4 pt-0
     bg-sand-100/70 backdrop-blur
 `
-export const GameStartButton = tw.button`
-    w-full h-10
-    rounded-lg 
-    bg-amber-200 text-amber-700
+const GameControlButton = tw.button`
+    h-10
+    rounded-lg
+    duration-200
+`
+export const GameStartButton = tw(GameControlButton)`
+    w-full
+    bg-amber-200 hover:bg-amber-300 text-amber-700
+    disabled:bg-sand-300 disabled:text-sand-700
+`
+export const GameResetButton = tw(GameControlButton)`
+    flex-shrink-0
+    w-24
+    bg-red-200 hover:bg-red-300 text-red-700
     disabled:bg-sand-300 disabled:text-sand-700
 `
 
@@ -108,7 +123,7 @@ export const ResultBox = tw.div`
 `
 
 export const ToggleMobileControl = tw.button`
-    absolute z-50  right-4
+    absolute z-50 right-4 desktop:hidden
     ${({ $is_show }) => $is_show ? "bottom-[21rem]" : "bottom-[7em]"}
     flex flex-center px-4 py-2
     rounded-full bg-sand-100/70 backdrop-blur

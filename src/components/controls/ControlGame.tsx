@@ -62,7 +62,7 @@ const Game = ({ type, currentType, setRandomType, title, icon }: IGame) => {
                 setRandomType(type)
             }}
         >
-            <div className={`icon bg-blue-400 border-2 border-blue-500 text-2xl text-yellow-400 font-bold shadow-blue-500 ${isHighlight ? "shadow-game_icon" : ""}`}>
+            <div className={`icon bg-blue-400 border-2 border-blue-500 text-2xl text-yellow-400 font-bold shadow-yellow-500 ${isHighlight ? "shadow-game_icon" : ""}`}>
                 {icon}
             </div>
             <span className="title">

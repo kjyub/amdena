@@ -108,7 +108,11 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
 
                 <CS.PlaceSearchResult $is_show={isPlaceResultShow && predictions.length > 0}>
                     {predictions.map((prediction, index) => (
-                        <button key={index} onClick={() => {handlePlaceSelect(prediction.place_id)}}>
+                        <button 
+                            key={index} 
+                            onClick={() => {handlePlaceSelect(prediction.place_id)}}
+                            disabled={!isPlaceResultShow}
+                        >
                             {prediction.description}
                         </button>
                     ))}

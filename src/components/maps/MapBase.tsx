@@ -19,6 +19,7 @@ import GameUtils from "@/utils/GameUtils"
 import MarkerResult from "./markers/MarkerResult"
 
 const initialZoom = 8
+const boundPadding = 0.1
 
 const initialCenter = {
     lat: 37.5665,
@@ -155,7 +156,7 @@ export default function MapBase({
         selectedArea.forEach((coord) => {
             bounds.extend(coord)
         })
-        map.fitBounds(bounds, 300)
+        map.fitBounds(bounds, 0.1)
 
         const boundCenter = bounds.getCenter()
         getGeocode(boundCenter.lat(), boundCenter.lng())
@@ -190,9 +191,28 @@ export default function MapBase({
     // endregion
 
     const handleResultClick = () => {
+        const halfPadding = boundPadding / 2
+
         const bounds = new google.maps.LatLngBounds()
-        bounds.extend(resultCoord)
-        map.fitBounds(bounds, 30000)
+        bounds.extend({ lat: resultCoord.lat + halfPadding, lng: resultCoord.lng + halfPadding })
+        bounds.extend({ lat: resultCoord.lat + halfPadding, lng: resultCoord.lng - halfPadding })
+        bounds.extend({ lat: resultCoord.lat - halfPadding, lng: resultCoord.lng + halfPadding })
+        bounds.extend({ lat: resultCoord.lat - halfPadding, lng: resultCoord.lng - halfPadding })
+        map.fitBounds(bounds)
+
+        const boundCenter = bounds.getCenter()
+        getGeocode(boundCenter.lat(), boundCenter.lng())
+    }
+
+    const handleAreaClick = () => {
+        const halfPadding = boundPadding / 2
+
+        const bounds = new google.maps.LatLngBounds()
+        bounds.extend({ lat: selectedArea.lat + halfPadding, lng: selectedArea.lng + halfPadding })
+        bounds.extend({ lat: selectedArea.lat + halfPadding, lng: selectedArea.lng - halfPadding })
+        bounds.extend({ lat: selectedArea.lat - halfPadding, lng: selectedArea.lng + halfPadding })
+        bounds.extend({ lat: selectedArea.lat - halfPadding, lng: selectedArea.lng - halfPadding })
+        map.fitBounds(bounds)
 
         const boundCenter = bounds.getCenter()
         getGeocode(boundCenter.lat(), boundCenter.lng())
@@ -247,6 +267,7 @@ export default function MapBase({
                             strokeWeight: 2,
                             fillOpacity: 0.35,
                         }}
+                        onClick={handleAreaClick}
                     />
                 )}
 
