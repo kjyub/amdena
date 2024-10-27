@@ -10,17 +10,21 @@ export default class MapUtils {
             const response: google.maps.GeocoderResponse = await axios.get(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
             )
-            
             const results = response.data.results
             let result: google.maps.GeocoderResult = null
 
-            if (results.length > 2) {
-                geocode = results[results.length - 2]
-            } else if (results.length === 1) {
-                geocode = results[0]
-            } else {
-                return geocode
+            if (results.length === 0) {
+                return result
             }
+
+            for (let i=0; i<results.length; i++) {
+                if (!results[i].types.includes("plus_code")) {
+                    result = results[i]
+                    break
+                }
+            }
+            
+            return result
         } catch (error) {
             console.error('Error during reverse geocoding:', error)
         }
@@ -38,6 +42,56 @@ export default class MapUtils {
         }
 
         return address
+    }
+    static async getMapAddress3(lat: number, lng: number): google.maps.GeocoderResult | null {
+        let geocode: google.maps.GeocoderResult | null = null
+
+        try {
+            const response: google.maps.GeocoderResponse = await axios.get(
+                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GOOGLE_API_KEY}`
+            )
+            console.log(response.data)
+            
+            const data = response.data 
+            if (data.status === "OK") {
+                // Find Korean-readable address from API result
+                const addressComponents = data.results[0].address_components;
+                let koreanAddress = "";
+          
+                // Define address parts to include in a Korean-friendly format
+                const parts = {
+                  country: "",
+                  administrative_area_level_1: "", // Province/City level (e.g., "서울특별시")
+                  administrative_area_level_2: "", // District level (e.g., "강남구")
+                  locality: "",                    // Town/City level (e.g., "서울")
+                  sublocality_level_1: "",         // Sub-district (e.g., "역삼동")
+                  route: "",                       // Street (e.g., "테헤란로")
+                  street_number: ""                // Street number
+                };
+          
+                // Extract each part
+                addressComponents.forEach(component => {
+                  const types = component.types;
+                  for (const part in parts) {
+                    if (types.includes(part)) {
+                      parts[part] = component.long_name;
+                    }
+                  }
+                });
+          
+                // Assemble a readable address
+                koreanAddress = `${parts.administrative_area_level_1} ${parts.administrative_area_level_2} ${parts.sublocality_level_1} ${parts.route} ${parts.street_number}`;
+          
+                // Fall back to 'formatted_address' if any component is missing
+                return koreanAddress.trim() || data.results[0].formatted_address;
+              } else {
+                throw new Error("Geocoding failed");
+              }
+        } catch (error) {
+            console.error('Error during reverse geocoding:', error)
+        }
+
+        return geocode
     }
     static getCoordinateMargin(zoom: number): number {
         const a = 0.040275
