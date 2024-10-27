@@ -4,10 +4,10 @@ import tw from "tailwind-styled-components"
 export const Layout = tw.div<StyleProps>`
     absolute z-10
     max-desktop:left-0 
-    ${({ $is_show }) => $is_show ? "max-desktop:bottom-0" : "max-desktop:-bottom-56"}
+    ${({ $is_show }) => $is_show ? "max-desktop:bottom-0" : "max-desktop:-bottom-48"}
     desktop:right-0 desktop:top-0
     flex flex-col
-    max-desktop:w-full max-desktop:h-80
+    max-desktop:w-full max-desktop:h-72
     desktop:w-80 desktop:p-4
     bg-transparent
     duration-300
@@ -67,7 +67,7 @@ export const ToolBox = tw.div`
 export const ToolBoxButton = tw.button`
     flex flex-center w-full px-2 py-1 space-x-1
     rounded-md
-    ${({ $is_active }) => !$is_active ? "bg-transparent hover:bg-sand-400/30" : "bg-sand-400/20"}
+    ${({ $is_active }) => !$is_active ? "bg-transparent desktop:hover:bg-sand-400/30" : "bg-sand-400/20"}
     text-sm text-sand-600
     duration-200
 `
@@ -141,7 +141,7 @@ export const OldResultBox = tw(ResultBox)`
 
 export const ToggleMobileControl = tw.button`
     absolute z-50 right-4 desktop:hidden
-    ${({ $is_show }) => $is_show ? "bottom-[21rem]" : "bottom-[7em]"}
+    ${({ $is_show }) => $is_show ? "bottom-[18.4rem]" : "bottom-[7em]"}
     flex flex-center px-4 py-2
     rounded-full bg-sand-100/70 backdrop-blur
     text-sand-800 font-medium
