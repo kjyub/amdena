@@ -63,7 +63,6 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
     }
 
     const handlePlaceSelect = (placeId: string) => {
-        console.log(placeId)
         if (!placesService.current && window.google && map !== null) {
             placesService.current = new google.maps.places.PlacesService(map)
         }
@@ -74,7 +73,6 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
 
         // `placeId`를 사용해 장소의 상세 정보 요청
         placesService.current.getDetails({ placeId }, (place, status) => {
-            console.log("Selected place:", place, status)
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 const area: Coordinates = [
                     { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getNorthEast().lng() },
@@ -98,8 +96,6 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
             }
         })
     }
-
-    console.log(isResultShow)
 
     return (
         <CS.AreaMethodDetailContainer>

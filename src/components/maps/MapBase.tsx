@@ -14,8 +14,6 @@ import MapPlace from "./MapPlace"
 import { Coordinate, Coordinates } from "@/types/game/Coordinates"
 import { AreaMethodTypes, GameTypes } from "@/types/ControlTypes"
 import MapUtils from "@/utils/MapUtils"
-import { get } from "node_modules/axios/index.cjs"
-import { l } from "node_modules/vite/dist/node/types.d-aGj9QkWt"
 import GameUtils from "@/utils/GameUtils"
 import MarkerResult from "./markers/MarkerResult"
 import GameResult from "@/types/game/GameResult"
@@ -24,7 +22,7 @@ import ModalContainer from "../ModalContainer"
 import dayjs from "dayjs"
 
 const initialZoom = 8
-const boundPadding = 0.1
+const boundPadding = parseFloat(0.1 / 8)
 
 const initialCenter = {
     lat: 37.5665,
@@ -221,21 +219,26 @@ export default function MapBase({
     // endregion
 
     const handleMarkerMove = (coord: Coordinate) => {
-        const halfPadding = boundPadding / 2
-
         const bounds = new google.maps.LatLngBounds()
-        bounds.extend({ lat: coord.lat + halfPadding, lng: coord.lng + halfPadding })
-        bounds.extend({ lat: coord.lat + halfPadding, lng: coord.lng - halfPadding })
-        bounds.extend({ lat: coord.lat - halfPadding, lng: coord.lng + halfPadding })
-        bounds.extend({ lat: coord.lat - halfPadding, lng: coord.lng - halfPadding })
+        bounds.extend({ lat: parseFloat(coord.lat + boundPadding), lng: parseFloat(coord.lng + boundPadding) })
+        bounds.extend({ lat: parseFloat(coord.lat + boundPadding), lng: parseFloat(coord.lng - boundPadding) })
+        bounds.extend({ lat: parseFloat(coord.lat - boundPadding), lng: parseFloat(coord.lng + boundPadding) })
+        bounds.extend({ lat: parseFloat(coord.lat - boundPadding), lng: parseFloat(coord.lng - boundPadding) })
         map.fitBounds(bounds)
 
         const boundCenter = bounds.getCenter()
         getGeocode(boundCenter.lat(), boundCenter.lng())
     }
 
-    const handleAreaClick = () => {
-        handleMarkerMove(selectedArea)
+    const handleAreaClick = (e) => {
+        const bounds = new google.maps.LatLngBounds()
+        for (const coord of selectedArea) {
+            bounds.extend(coord)
+        }
+        map.fitBounds(bounds)
+
+        const boundCenter = bounds.getCenter()
+        getGeocode(boundCenter.lat(), boundCenter.lng())
     }
 
     if (!isLoaded) {
@@ -287,10 +290,7 @@ export default function MapBase({
                             strokeWeight: 2,
                             fillOpacity: 0.35,
                         }}
-                        onClick={(e) => {
-                            e.domEvent.stopPropagation()
-                            handleAreaClick()
-                        }}
+                        onRightClick={handleAreaClick}
                     />
                 )}
 
