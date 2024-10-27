@@ -10,7 +10,7 @@ function App() {
     const [selectedArea, setSelectedArea] = useState<Coordinates>([])
 
     const [areaMethodType, setAreaMethodType] = useState<AreaMethodTypes>(AreaMethodTypes.ALL)
-    const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.NONE)
+    const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.RANDOM)
     const [isGameStart, setGameStart] = useState<boolean>(false)
 
     const [isShowResultMarker, setShowResultMarker] = useState<boolean>(false)
@@ -18,7 +18,7 @@ function App() {
 
     useEffect(() => {
         setSelectedArea([])
-        setRandomGameType(GameTypes.NONE)
+        // setRandomGameType(GameTypes.NONE)
         setGameStart(false)
     }, [areaMethodType])
 

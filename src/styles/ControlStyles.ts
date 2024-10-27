@@ -55,7 +55,9 @@ export const GameStartButton = tw(GameControlButton)`
 export const GameResetButton = tw(GameControlButton)`
     flex-shrink-0
     w-24
-    bg-red-200 hover:bg-red-300 text-red-700
+    bg-transparent hover:bg-red-100/50
+    border border-red-500/50
+    text-red-500
     disabled:bg-sand-300 disabled:text-sand-700
 `
 
@@ -126,7 +128,7 @@ export const ResultBox = tw.div`
     rounded-lg bg-sand-100/70 backdrop-blur
 
     [&>.value]:text-sm [&>.value]:text-sand-700 [&>.value]:font-medium
-    [&>.value]:text-left [&>.value]:pl-1
+    [&>.value]:text-left [&>.value]:pt-1 [&>.value]:pl-1
     [&>.control]:flex [&>.control]:flex-shrink-0 [&>.control]:justify-end [&>.control]:items-center [&>.control]:space-x-2
     [&>.control>.more]:ml-auto [&>.control>.more]:px-2 [&>.control>.more]:py-1
     [&>.control>.more]:text-sm [&>.control>.more]:text-sand-600
