@@ -47,7 +47,7 @@ export default function ControlArea({
     return (
         <CS.ControlBox>
             <CS.ControlExplain>
-                <p>영역을 설정할 방식을 골라주세요</p>
+                <p>영역을 선택할 방식을 골라주세요</p>
                 {/* <p className="sub">고르지 않을 시 전 세계에서 선택합니다</p> */}
             </CS.ControlExplain>
 
@@ -56,22 +56,28 @@ export default function ControlArea({
                     $is_active={areaMethodType === AreaMethodTypes.AREA}
                     onClick={() => {handleAreaMethod(AreaMethodTypes.AREA)}}
                 >
-                    <span>영역 그리기</span>
+                    <i className="fa-solid fa-draw-polygon"></i>
+                    <span>다각형</span>
                 </CS.AreaMethodButton>
                 <CS.AreaMethodButton 
                     $is_active={areaMethodType === AreaMethodTypes.LOCATION}
                     onClick={() => {handleAreaMethod(AreaMethodTypes.LOCATION)}}
                 >
-                    <span>영역 검색</span>
+                    <i className="fa-solid fa-magnifying-glass"></i>
+                    <span>위치 검색</span>
                 </CS.AreaMethodButton>
             </CS.AreaMethodBox>
 
             {isDrawPath && (
                 <div className="w-full h-24">
                     <div className="area-active flex flex-col flex-center text-sm text-sand-700">
-                        <span>지도 위에 직접 영역을 그려주세요</span>
-                        <span>시작 지점 부근을 클릭하여 완료</span>
-                        <span className="text-xs text-sand-500">다시 그릴려면 영역 그리기를 다시 실행해주세요</span>
+                        <span className="font-medium">지도 위에 직접 영역을 그려주세요</span>
+                        <p className="text-sand-600">
+                            영역의 꼭짓점이 될 부분을 클릭하고
+                            <br />
+                            마지막 꼭짓점을 클릭하여 완성해주세요
+                        </p>
+                        {/* <span className="text-xs text-sand-500">다시 그릴려면 영역 그리기를 다시 실행해주세요</span> */}
                     </div>
                 </div>
             )}

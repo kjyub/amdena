@@ -75,12 +75,14 @@ export const AreaMethodBox = tw.div`
     grid grid-cols-2 gap-1 w-full max-desktop:h-7 desktop:h-8
 `
 export const AreaMethodButton = tw.button<StyleProps>`
-    flex justify-center items-center w-full
+    flex justify-center items-center w-full space-x-1
     rounded-lg
     ${({ $is_active }) => $is_active ? "bg-red-200" : "hover:bg-red-100"}
     text-red-700 max-desktop:text-sm
     duration-200
     select-none
+
+    [&>i]:text-sm
 `
 
 export const GameSelectList = tw.div`

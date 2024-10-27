@@ -284,7 +284,7 @@ export default function MapBase({
                     <Polygon 
                         paths={selectedArea}
                         options={{
-                            fillColor: "transparent",
+                            fillColor: `rgba(0, 0, 255, ${!resultCoord ? 0.25 : 0})`,
                             strokeColor: "blue",
                             strokeOpacity: 0.8,
                             strokeWeight: 2,
