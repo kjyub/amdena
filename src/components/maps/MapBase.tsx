@@ -85,6 +85,11 @@ export default function MapBase({
 
         // 게임별 설정
         setRandomPickStart(false)
+
+        // 영역 선택 방법이 초기 상태가 된 경우
+        if (areaMethodType === AreaMethodTypes.ALL) {
+            setResultCoord(null)
+        }
     }, [areaMethodType, selectedArea])
 
     useEffect(() => {
@@ -135,7 +140,6 @@ export default function MapBase({
         if (isDrawPath) {
             const drawCoord = { lat: e.latLng.lat(), lng: e.latLng.lng() }
             const _drawPaths = [...drawPaths, drawCoord]
-            console.log(_drawPaths)
             setDrawPaths(_drawPaths)
 
             if (_drawPaths.length > 2) {
@@ -231,17 +235,7 @@ export default function MapBase({
     }
 
     const handleAreaClick = () => {
-        const halfPadding = boundPadding / 2
-
-        const bounds = new google.maps.LatLngBounds()
-        bounds.extend({ lat: selectedArea.lat + halfPadding, lng: selectedArea.lng + halfPadding })
-        bounds.extend({ lat: selectedArea.lat + halfPadding, lng: selectedArea.lng - halfPadding })
-        bounds.extend({ lat: selectedArea.lat - halfPadding, lng: selectedArea.lng + halfPadding })
-        bounds.extend({ lat: selectedArea.lat - halfPadding, lng: selectedArea.lng - halfPadding })
-        map.fitBounds(bounds)
-
-        const boundCenter = bounds.getCenter()
-        getGeocode(boundCenter.lat(), boundCenter.lng())
+        handleMarkerMove(selectedArea)
     }
 
     if (!isLoaded) {
@@ -293,7 +287,10 @@ export default function MapBase({
                             strokeWeight: 2,
                             fillOpacity: 0.35,
                         }}
-                        onClick={handleAreaClick}
+                        onClick={(e) => {
+                            e.domEvent.stopPropagation;
+                            handleAreaClick()
+                        }}
                     />
                 )}
 

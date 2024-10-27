@@ -29,7 +29,10 @@ export default function MarkerResult({ position, onClick }: IMarkerResult) {
             {/* <div className="result-marker">
             </div> */}
             <div className="absolute w-6 h-6 bg-red-500 rounded-full animate-ping"
-                onClick={() => {onClick()}}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick();
+                }}
             >
             </div>
             <CS.ResultBox>

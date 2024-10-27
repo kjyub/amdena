@@ -20,7 +20,10 @@ export default function MarkerOldResult({ result, onClick }: IMarkerOldResult) {
             {/* <div className="result-marker">
             </div> */}
             <div className="absolute w-6 h-6 bg-purple-500 rounded-full animate-ping"
-                onClick={() => {onClick()}}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick();
+                }}
             >
             </div>
             <CS.OldResultBox className="hidden">

@@ -43,7 +43,7 @@ export default function ControlMain({
     const [isShowResultListModal, setShowResultListModal] = useState<boolean>(false)
 
     const isAvailGameStart = selectedArea.length > 0 && randomGameType !== GameTypes.NONE
-    console.log(selectedArea.length, randomGameType)
+
     const handleGameStart = () => {
         if (selectedArea.length === 0) {
             alert("영역을 설정해주세요")
