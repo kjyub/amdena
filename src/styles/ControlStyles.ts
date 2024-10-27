@@ -14,14 +14,13 @@ export const Layout = tw.div<StyleProps>`
 `
 
 export const Panel = tw.div`
-    relative
+    relative z-0
     flex flex-col p-4 space-y-2
     max-desktop:w-full max-desktop:h-full max-desktop:pb-16
     desktop:w-full
     rounded-xl max-desktop:rounded-b-none
     bg-sand-100/70 backdrop-blur
     border border-sand-300
-    overflow-y-auto scroll-transparent scroll-overlay
 `
 
 export const ControlExplain = tw.div`
@@ -109,7 +108,7 @@ export const PlaceSearchInput = tw.input`
     outline-none
 `
 export const PlaceSearchResult = tw.div<StyleProps>`
-    absolute top-10
+    absolute top-10 left-0 translate-z-0
     ${({ $is_show }) => $is_show ? "z-20 translate-y-0 opacity-100" : "-z-10 -translate-y-4 opacity-0"}
     flex flex-col w-full max-h-[384px] p-2 space-y-1
     rounded-xl bg-sand-100

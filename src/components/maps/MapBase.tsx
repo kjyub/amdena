@@ -288,7 +288,7 @@ export default function MapBase({
                             fillOpacity: 0.35,
                         }}
                         onClick={(e) => {
-                            e.domEvent.stopPropagation;
+                            e.domEvent.stopPropagation()
                             handleAreaClick()
                         }}
                     />

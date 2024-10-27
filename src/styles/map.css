@@ -2,3 +2,5 @@
     bottom: 50px !important;
     right: 140px !important;
 } */
+
+.gm-style iframe + div { border:none!important; }

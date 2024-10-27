@@ -5,15 +5,18 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Autocomplete, useLoadScript } from '@react-google-maps/api'
 import axios from "axios"
 import { Coordinates } from "@/types/game/Coordinates"
+import { useDetectClose } from "@/hooks/useDetectClose"
 
 interface IControlAreaSearch {
     map: google.maps.Map | null
     setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>
 }
 export default function ControlAreaSearch({ map, setSelectedArea }: IControlAreaSearch) {
-    const [isPlaceResultShow, setPlaceResultShow] = useState<boolean>(false)
+    // const [isResultShow, setPlaceResultShow] = useState<boolean>(false)
     const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([])
     const [searchValue, setSearchValue] = useState<string>("")
+
+    const [resultRef, isResultShow, setResultShow] = useDetectClose()
 
     const autocompleteRef = useRef<Autocomplete>(null)
     const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null)
@@ -60,6 +63,7 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
     }
 
     const handlePlaceSelect = (placeId: string) => {
+        console.log(placeId)
         if (!placesService.current && window.google && map !== null) {
             placesService.current = new google.maps.places.PlacesService(map)
         }
@@ -70,6 +74,7 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
 
         // `placeId`를 사용해 장소의 상세 정보 요청
         placesService.current.getDetails({ placeId }, (place, status) => {
+            console.log("Selected place:", place, status)
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 const area: Coordinates = [
                     { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getNorthEast().lng() },
@@ -94,24 +99,29 @@ export default function ControlAreaSearch({ map, setSelectedArea }: IControlArea
         })
     }
 
+    console.log(isResultShow)
+
     return (
         <CS.AreaMethodDetailContainer>
-            <div className="relative w-full">
+            <div
+                ref={resultRef} 
+                className="relative w-full"
+            >
                 <CS.PlaceSearchInput 
                     type="text" 
                     value={searchValue}
                     placeholder="장소를 검색해주세요"
                     onChange={onChangeSearch} 
-                    onFocus={() => {setPlaceResultShow(true)}}
-                    onBlur={() => {setPlaceResultShow(false)}}
+                    onFocus={() => {setResultShow(true)}}
+                    // onBlur={() => {setPlaceResultShow(false)}}
                 />
 
-                <CS.PlaceSearchResult $is_show={isPlaceResultShow && predictions.length > 0}>
+                <CS.PlaceSearchResult $is_show={isResultShow && predictions.length > 0}>
                     {predictions.map((prediction, index) => (
                         <button 
                             key={index} 
                             onClick={() => {handlePlaceSelect(prediction.place_id)}}
-                            disabled={!isPlaceResultShow}
+                            disabled={!isResultShow}
                         >
                             {prediction.description}
                         </button>
