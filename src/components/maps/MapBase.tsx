@@ -171,8 +171,8 @@ export default function MapBase({
 
     // 좌표로부터 위치 정보(주소) 가져오기
     const getGeocode = async (lat, lng) => {
-        const _address = await MapUtils.getMapAddress(lat, lng)
-        setAddress(_address)
+        // const _address = await MapUtils.getMapAddress(lat, lng)
+        // setAddress(_address)
     }
 
     const moveSelectedArea = () => {
@@ -260,9 +260,9 @@ export default function MapBase({
 
     return (
         <MS.Layout>
-            <MapPlace
+            {/* <MapPlace
                 address={address}
-            />
+            /> */}
             <GoogleMap
                 id="map"
                 ref={mapRef}
