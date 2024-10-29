@@ -24,6 +24,10 @@ export default function MarkerResult({ position, onClick }: IMarkerResult) {
         navigator.clipboard.writeText(value)
     }
 
+    const handleGoogleMap = () => {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${position.lat},${position.lng}`, '_blank')
+    }
+
     return (
         <div className="relative w-8 h-8">
             {/* <div className="result-marker">
@@ -47,9 +51,13 @@ export default function MarkerResult({ position, onClick }: IMarkerResult) {
                             복사
                         </button>
                     </CopyToClipboard>
-                    {/* <button className="more">
-                        더 보기
-                    </button> */}
+                    <button 
+                        className="more"
+                        onClick={() => {handleGoogleMap()}}
+                    >
+                        <i className="fa-solid fa-map text-xs mr-1"></i>
+                        지도
+                    </button>
                 </div>
             </CS.ResultBox>
         </div>

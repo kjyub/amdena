@@ -125,12 +125,12 @@ export const PlaceSearchResult = tw.div<StyleProps>`
 
 export const ResultBox = tw.div`
     absolute z-50 bottom-12 -left-32
-    flex flex-row justify-between items-start w-72 px-2 py-1 space-x-1
+    flex flex-row justify-between items-start w-72 px-2 py-1
     rounded-lg bg-sand-100/70 backdrop-blur
 
     [&>.value]:text-sm [&>.value]:text-sand-700 [&>.value]:font-medium
-    [&>.value]:text-left [&>.value]:pt-1 [&>.value]:pl-1
-    [&>.control]:flex [&>.control]:flex-shrink-0 [&>.control]:justify-end [&>.control]:items-center [&>.control]:space-x-2
+    [&>.value]:text-left [&>.value]:p-1
+    [&>.control]:flex [&>.control]:flex-shrink-0 [&>.control]:flex-col [&>.control]:justify-end [&>.control]:items-center
     [&>.control>.more]:ml-auto [&>.control>.more]:px-2 [&>.control>.more]:py-1
     [&>.control>.more]:text-sm [&>.control>.more]:text-sand-600
     [&>.control>.more]:rounded-lg hover:[&>.control>.more]:bg-sand-300/50 [&>.control>.more]:duration-200
