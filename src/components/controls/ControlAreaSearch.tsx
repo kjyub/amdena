@@ -1,129 +1,142 @@
-import * as MS from "@/styles/MapStyles"
-import * as CS from "@/styles/ControlStyles"
-import CommonUtils from "@/utils/CommonUtils"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { Autocomplete, useLoadScript } from '@react-google-maps/api'
-import axios from "axios"
-import { Coordinates } from "@/types/game/Coordinates"
-import { useDetectClose } from "@/hooks/useDetectClose"
+import * as CS from "@/styles/ControlStyles";
+import { useEffect, useRef, useState } from "react";
+import { Autocomplete } from "@react-google-maps/api";
+import { Coordinates } from "@/types/game/Coordinates";
+import { useDetectClose } from "@/hooks/useDetectClose";
 
 interface IControlAreaSearch {
-    map: google.maps.Map | null
-    setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>
+  map: google.maps.Map | null;
+  setSelectedArea: React.Dispatch<React.SetStateAction<Coordinates>>;
 }
 export default function ControlAreaSearch({ map, setSelectedArea }: IControlAreaSearch) {
-    // const [isResultShow, setPlaceResultShow] = useState<boolean>(false)
-    const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([])
-    const [searchValue, setSearchValue] = useState<string>("")
+  const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+  const [searchValue, setSearchValue] = useState<string>("");
 
-    const [resultRef, isResultShow, setResultShow] = useDetectClose()
+  const [resultRef, isResultShow, setResultShow] = useDetectClose<HTMLDivElement>();
 
-    const autocompleteRef = useRef<Autocomplete>(null)
-    const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null)
+  const autocompleteRef = useRef<Autocomplete>(null);
+  const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
 
-    const placesService = useRef<unknown>(null)
+  const placesService = useRef<google.maps.places.PlacesService | null>(null);
 
-    useEffect(() => {
-        if (!autocompleteRef.current) {
-            return
-        }
-
-        autocompleteService.current = new google.maps.places.AutocompleteService()
-    }, [])
-
-    useEffect(() => {
-        if (searchValue === "") {
-            setPredictions([])
-        }
-    }, [searchValue])
-
-    const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        setSearchValue(value)
-
-        if (!autocompleteService.current && window.google) {
-            autocompleteService.current = new window.google.maps.places.AutocompleteService()
-        }
-
-        if (!autocompleteService.current) {
-            return
-        }
-
-        if (CommonUtils.isStringNullOrEmpty(value)) {
-            return
-        }
-
-        autocompleteService.current.getPlacePredictions({ input: value }, (predictions, status) => {
-            if (status !== google.maps.places.PlacesServiceStatus.OK || predictions === null) {
-                return
-            }  
-
-            setPredictions(predictions)
-        })
+  useEffect(() => {
+    if (!autocompleteRef.current) {
+      return;
     }
 
-    const handlePlaceSelect = (placeId: string) => {
-        if (!placesService.current && window.google && map !== null) {
-            placesService.current = new google.maps.places.PlacesService(map)
-        }
+    autocompleteService.current = new google.maps.places.AutocompleteService();
+  }, []);
 
-        if (!placesService.current) {
-            return
-        }
+  useEffect(() => {
+    if (searchValue === "") {
+      setPredictions([]);
+    }
+  }, [searchValue]);
 
-        // `placeId`를 사용해 장소의 상세 정보 요청
-        placesService.current.getDetails({ placeId }, (place, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-                const area: Coordinates = [
-                    { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getNorthEast().lng() },
-                    { lat: place.geometry.viewport.getNorthEast().lat(), lng: place.geometry.viewport.getSouthWest().lng() },
-                    { lat: place.geometry.viewport.getSouthWest().lat(), lng: place.geometry.viewport.getSouthWest().lng() },
-                    { lat: place.geometry.viewport.getSouthWest().lat(), lng: place.geometry.viewport.getNorthEast().lng() },
-                ]
-                setSelectedArea(area)
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
 
-                // // 원하는 정보: geometry, location, viewport 등
-                // const location = place.geometry.location
-                // const viewport = place.geometry.viewport
-
-                // console.log("Selected place location:", location.lat(), location.lng())
-                // if (viewport) {
-                //     console.log("Viewport bounds:", {
-                //         northeast: viewport.getNorthEast().toJSON(),
-                //         southwest: viewport.getSouthWest().toJSON(),
-                //     })
-                // }
-            }
-        })
+    if (!autocompleteService.current && window.google) {
+      autocompleteService.current = new window.google.maps.places.AutocompleteService();
     }
 
-    return (
-        <CS.AreaMethodDetailContainer>
-            <div
-                ref={resultRef} 
-                className="relative w-full"
+    if (!autocompleteService.current) {
+      return;
+    }
+
+    if (!value) {
+      return;
+    }
+
+    void autocompleteService.current.getPlacePredictions({ input: value }, (predictions, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || predictions === null) {
+        return;
+      }
+
+      setPredictions(predictions);
+    });
+  };
+
+  const handlePlaceSelect = (placeId: string) => {
+    if (!placesService.current && window.google && map !== null) {
+      placesService.current = new google.maps.places.PlacesService(map);
+    }
+
+    if (!placesService.current) {
+      return;
+    }
+
+    // `placeId`를 사용해 장소의 상세 정보 요청
+    void placesService.current.getDetails({ placeId }, (place, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && place?.geometry?.viewport) {
+        const area: Coordinates = [
+          {
+            lat: place.geometry.viewport.getNorthEast().lat(),
+            lng: place.geometry.viewport.getNorthEast().lng(),
+          },
+          {
+            lat: place.geometry.viewport.getNorthEast().lat(),
+            lng: place.geometry.viewport.getSouthWest().lng(),
+          },
+          {
+            lat: place.geometry.viewport.getSouthWest().lat(),
+            lng: place.geometry.viewport.getSouthWest().lng(),
+          },
+          {
+            lat: place.geometry.viewport.getSouthWest().lat(),
+            lng: place.geometry.viewport.getNorthEast().lng(),
+          },
+          {
+            lat: place.geometry.viewport.getNorthEast().lat(),
+            lng: place.geometry.viewport.getNorthEast().lng(),
+          },
+        ];
+        setSelectedArea(area);
+
+        // // 원하는 정보: geometry, location, viewport 등
+        // const location = place.geometry.location
+        // const viewport = place.geometry.viewport
+
+        // console.log("Selected place location:", location.lat(), location.lng())
+        // if (viewport) {
+        //     console.log("Viewport bounds:", {
+        //         northeast: viewport.getNorthEast().toJSON(),
+        //         southwest: viewport.getSouthWest().toJSON(),
+        //     })
+        // }
+      }
+    });
+  };
+
+  return (
+    <CS.AreaMethodDetailContainer>
+      <div ref={resultRef} className="relative w-full">
+        <CS.PlaceSearchInput
+          type="text"
+          value={searchValue}
+          placeholder="장소를 검색해주세요"
+          onChange={onChangeSearch}
+          onFocus={() => {
+            setResultShow(true);
+          }}
+        />
+
+        <CS.PlaceSearchResult $is_show={isResultShow && predictions.length > 0}>
+          {predictions.map((prediction) => (
+            <button
+              type="button"
+              key={prediction.place_id}
+              onClick={() => {
+                handlePlaceSelect(prediction.place_id);
+              }}
+              disabled={!isResultShow}
             >
-                <CS.PlaceSearchInput 
-                    type="text" 
-                    value={searchValue}
-                    placeholder="장소를 검색해주세요"
-                    onChange={onChangeSearch} 
-                    onFocus={() => {setResultShow(true)}}
-                    // onBlur={() => {setPlaceResultShow(false)}}
-                />
-
-                <CS.PlaceSearchResult $is_show={isResultShow && predictions.length > 0}>
-                    {predictions.map((prediction, index) => (
-                        <button 
-                            key={index} 
-                            onClick={() => {handlePlaceSelect(prediction.place_id)}}
-                            disabled={!isResultShow}
-                        >
-                            {prediction.description}
-                        </button>
-                    ))}
-                </CS.PlaceSearchResult>
-            </div>
-        </CS.AreaMethodDetailContainer>
-    )
+              {prediction.description}
+            </button>
+          ))}
+        </CS.PlaceSearchResult>
+      </div>
+    </CS.AreaMethodDetailContainer>
+  );
 }

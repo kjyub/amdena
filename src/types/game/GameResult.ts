@@ -1,30 +1,30 @@
-import { Coordinate } from "./Coordinates"
+import { Coordinate } from './Coordinates';
 
 export default class GameResult {
-    created: Date
-    coord: Coordinate
-    address: string
+  created: Date;
+  coord: Coordinate;
+  address: string;
 
-    constructor(coord: Coordinate, address: string, created: Date = new Date()) {
-        this.coord = coord
-        this.address = address
-        this.created = new Date()
-    }
+  constructor(coord: Coordinate, address: string, created: Date = new Date()) {
+    this.coord = coord;
+    this.address = address;
+    this.created = created;
+  }
 
-    fromJSON(jsonString: string) {
-        const obj = JSON.parse(jsonString)
-        this.created = new Date(obj.created)
-        this.coord = obj.coord
-        this.address = obj.address
-    }
+  fromJSON(jsonString: string) {
+    const obj = JSON.parse(jsonString);
+    this.created = new Date(obj.created);
+    this.coord = obj.coord;
+    this.address = obj.address;
+  }
 
-    toObjectData(): object {
-        return {
-            created: this.created,
-            coord: this.coord,
-            address: this.address
-        }
-    }
+  toObjectData(): object {
+    return {
+      created: this.created,
+      coord: this.coord,
+      address: this.address,
+    };
+  }
 }
 
 // Example usage:

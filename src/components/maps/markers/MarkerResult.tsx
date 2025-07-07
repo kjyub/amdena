@@ -1,65 +1,55 @@
-import { Coordinate } from "@/types/game/Coordinates"
-import * as CS from "@/styles/ControlStyles"
-import { useEffect, useState } from "react"
-import MapUtils from "@/utils/MapUtils"
-import { CopyToClipboard } from "react-copy-to-clipboard"
+import { Coordinate } from "@/types/game/Coordinates";
+import * as CS from "@/styles/ControlStyles";
+import { useEffect, useState } from "react";
+import MapUtils from "@/utils/MapUtils";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface IMarkerResult {
-    position: Coordinate
-    onClick: () => void
+  position: Coordinate;
+  onClick: () => void;
 }
 export default function MarkerResult({ position, onClick }: IMarkerResult) {
-    const [value, setValue] = useState<string>("")
+  const [value, setValue] = useState<string>("");
 
-    useEffect(() => {
-        getGeocode(position.lat, position.lng)
-    }, [position])
+  useEffect(() => {
+    void getGeocode(position.lat, position.lng);
+  }, [position]);
 
-    const getGeocode = async (lat, lng) => {
-        const geocode = await MapUtils.getGeocode(lat, lng)
-        setValue(geocode?.formatted_address)
-    }
+  const getGeocode = async (lat: number, lng: number) => {
+    const geocode = await MapUtils.getGeocode(lat, lng);
+    setValue(geocode?.formatted_address ?? "");
+  };
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(value)
-    }
+  const handleGoogleMap = () => {
+    window.open(`https://www.google.com/maps/search/?api=1&query=${position.lat},${position.lng}`, "_blank");
+  };
 
-    const handleGoogleMap = () => {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${position.lat},${position.lng}`, '_blank')
-    }
-
-    return (
-        <div className="relative w-8 h-8">
-            {/* <div className="result-marker">
-            </div> */}
-            <div className="absolute w-6 h-6 bg-red-500 rounded-full animate-ping"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onClick();
-                }}
-            >
-            </div>
-            <CS.ResultBox>
-                <span className="value">
-                    {value}
-                </span>
-                <div className="control">
-                    <CopyToClipboard
-                        text={value}
-                    >
-                        <button className="more">
-                            복사
-                        </button>
-                    </CopyToClipboard>
-                    <button 
-                        className="more"
-                        onClick={() => {handleGoogleMap()}}
-                    >
-                        <i className="fa-solid fa-map text-xs mr-1"></i>
-                        지도
-                    </button>
-                </div>
-            </CS.ResultBox>
+  return (
+    <div className="relative w-8 h-8">
+      <div
+        className="absolute w-6 h-6 bg-red-500 rounded-full animate-ping"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+      ></div>
+      <CS.ResultBox>
+        <span className="value">{value}</span>
+        <div className="control">
+          <CopyToClipboard text={value}>
+            <button className="more">복사</button>
+          </CopyToClipboard>
+          <button
+            className="more"
+            onClick={() => {
+              handleGoogleMap();
+            }}
+          >
+            <i className="fa-solid fa-map text-xs mr-1"></i>
+            지도
+          </button>
         </div>
-    )
+      </CS.ResultBox>
+    </div>
+  );
 }

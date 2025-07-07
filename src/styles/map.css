@@ -3,4 +3,6 @@
     right: 140px !important;
 } */
 
-.gm-style iframe + div { border:none!important; }
+.gm-style iframe + div {
+  border: none !important;
+}

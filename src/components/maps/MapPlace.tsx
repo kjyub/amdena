@@ -1,19 +1,12 @@
-import * as MS from "@/styles/MapStyles"
-import CommonUtils from "@/utils/CommonUtils"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { Autocomplete, useLoadScript } from '@react-google-maps/api'
-import axios from "axios"
+import * as MS from "@/styles/MapStyles";
 
 interface IMapPlace {
-    map: google.maps.Map
+  address: string;
 }
-export default function MapPlace({ map, address, setSelectedPlace }: IMapPlace) {
-
-    return (
-        <MS.MapInfoBox>
-            <MS.AddressMain>
-                {address}
-            </MS.AddressMain>
-        </MS.MapInfoBox>
-    )
+export default function MapPlace({ address }: IMapPlace) {
+  return (
+    <MS.MapInfoBox>
+      <MS.AddressMain>{address}</MS.AddressMain>
+    </MS.MapInfoBox>
+  );
 }

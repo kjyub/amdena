@@ -1,6 +1,6 @@
-export type Coordinate ={
-    lat: number
-    lng: number
-}
+export type Coordinate = {
+  lat: number;
+  lng: number;
+};
 
-export type Coordinates = Array<Coordinate>
+export type Coordinates = Array<Coordinate>;

@@ -1,68 +1,64 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import MapBase from './components/maps/MapBase'
-import ControlMain from './components/controls/ControlMain'
-import { Coordinates } from './types/game/Coordinates'
-import { AreaMethodTypes, GameTypes } from './types/ControlTypes'
+import { useEffect, useState } from "react";
+import "./App.css";
+import MapBase from "./components/maps/MapBase";
+import ControlMain from "./components/controls/ControlMain";
+import { Coordinates } from "./types/game/Coordinates";
+import { AreaMethodTypes, GameTypes } from "./types/ControlTypes";
 
-function App() {
-    const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [selectedArea, setSelectedArea] = useState<Coordinates>([])
-
-    const [areaMethodType, setAreaMethodType] = useState<AreaMethodTypes>(AreaMethodTypes.ALL)
-    const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.RANDOM)
-    const [isGameStart, setGameStart] = useState<boolean>(false)
-
-    const [isShowResultMarker, setShowResultMarker] = useState<boolean>(false)
-    const [isShowResultList, setShowResultList] = useState<boolean>(false)
-
-    useEffect(() => {
-        setSelectedArea([])
-        // setRandomGameType(GameTypes.NONE)
-        setGameStart(false)
-    }, [areaMethodType])
-
-    useEffect(() => {
-        setScreenSize()
-    })
-    
-    function setScreenSize() {
-        let vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty("--vh", `${vh}px`)
-    }
-
-    return (
-        <>
-            <MapBase 
-                map={map} 
-                setMap={setMap} 
-                selectedArea={selectedArea}
-                areaMethodType={areaMethodType}
-                setSelectedArea={setSelectedArea}
-                isGameStart={isGameStart}
-                setGameStart={setGameStart}
-                randomGameType={randomGameType}
-                isShowResultMarker={isShowResultMarker}
-                isShowResultList={isShowResultList}
-                setShowResultList={setShowResultList}
-            />
-            <ControlMain 
-                map={map} 
-                selectedArea={selectedArea}
-                setSelectedArea={setSelectedArea} 
-                areaMethodType={areaMethodType}
-                setAreaMethodType={setAreaMethodType}
-                randomGameType={randomGameType}
-                setRandomGameType={setRandomGameType}
-                isGameStart={isGameStart}
-                setGameStart={setGameStart}
-                isShowResultMarker={isShowResultMarker}
-                setShowResultMarker={setShowResultMarker}
-                isShowResultList={isShowResultList}
-                setShowResultList={setShowResultList}
-            />
-        </>
-    )
+function setScreenSize() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
 }
 
-export default App
+function App() {
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [selectedArea, setSelectedArea] = useState<Coordinates>([]);
+
+  const [areaMethodType, setAreaMethodType] = useState<AreaMethodTypes>(AreaMethodTypes.ALL);
+  const [randomGameType, setRandomGameType] = useState<GameTypes>(GameTypes.RANDOM);
+  const [isGameStart, setGameStart] = useState<boolean>(false);
+
+  const [isShowResultMarker, setShowResultMarker] = useState<boolean>(false);
+  const [isShowResultList, setShowResultList] = useState<boolean>(false);
+
+  useEffect(() => {
+    setSelectedArea([]);
+    setGameStart(false);
+    setScreenSize();
+  }, []);
+
+  return (
+    <>
+      <MapBase
+        map={map}
+        setMap={setMap}
+        selectedArea={selectedArea}
+        areaMethodType={areaMethodType}
+        setSelectedArea={setSelectedArea}
+        isGameStart={isGameStart}
+        setGameStart={setGameStart}
+        randomGameType={randomGameType}
+        isShowResultMarker={isShowResultMarker}
+        isShowResultList={isShowResultList}
+        setShowResultList={setShowResultList}
+      />
+      <ControlMain
+        map={map}
+        selectedArea={selectedArea}
+        setSelectedArea={setSelectedArea}
+        areaMethodType={areaMethodType}
+        setAreaMethodType={setAreaMethodType}
+        randomGameType={randomGameType}
+        setRandomGameType={setRandomGameType}
+        isGameStart={isGameStart}
+        setGameStart={setGameStart}
+        isShowResultMarker={isShowResultMarker}
+        setShowResultMarker={setShowResultMarker}
+        isShowResultList={isShowResultList}
+        setShowResultList={setShowResultList}
+      />
+    </>
+  );
+}
+
+export default App;

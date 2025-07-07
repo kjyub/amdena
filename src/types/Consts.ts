@@ -1,3 +1,3 @@
 export const LocalStorageConsts = {
-    GAME_RESULT: "game_result",
-}
+  GAME_RESULT: 'game_result',
+};
